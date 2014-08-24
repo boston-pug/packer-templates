@@ -10,9 +10,9 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "el6-minimal",
+    "hostname": "centos6-minimal",
     "configuration": "minimal",
-    "kickstart": "el6.ks"
+    "kickstart": "centos6.ks"
   },
   "builders": [
     {
@@ -43,11 +43,9 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
-        "scripts/base.sh",
         "scripts/vagrant-key.sh",
+        "scripts/enterprise/repos.sh",
         "scripts/udev-cleanup.sh",
-        "scripts/yum-upgrade.sh",
-        "scripts/yum-cleanup.sh",
         "scripts/cleanup.sh"
       ]
     }

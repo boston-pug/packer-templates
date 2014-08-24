@@ -64,12 +64,11 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
-        "scripts/base.sh",
-        "scripts/packages-ubuntu1404.sh",
+        "scripts/debian/base.sh",
+        "scripts/debian/packages-trusty.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
-        "scripts/apt-upgrade.sh",
-        "scripts/apt-cleanup.sh",
+        "scripts/debian/apt.sh",
         "scripts/cleanup.sh"
       ]
     }
