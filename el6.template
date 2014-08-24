@@ -1,0 +1,65 @@
+{
+  "variables": {
+    "iso_url": "http://mirror.rit.edu/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
+    "iso_checksum": "939fd1d87c11ffe7795324438b85adfb",
+    "iso_checksum_type": "md5",
+    "vbox_guest_os": "RedHat_64",
+    "arch": "x64",
+    "memory": "512",
+    "cpus": "1",
+    "disk": "10240",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "hostname": "el6-minimal",
+    "configuration": "minimal",
+    "kickstart": "el6.ks"
+  },
+  "builders": [
+    {
+    "type": "virtualbox-iso",
+    "guest_os_type": "{{user `vbox_guest_os`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+    ],
+    "boot_wait": "10s",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+    ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant-key.sh",
+        "scripts/udev-cleanup.sh",
+        "scripts/yum-upgrade.sh",
+        "scripts/yum-cleanup.sh",
+        "scripts/cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+        }
+      }
+    }
+  ]
+}

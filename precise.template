@@ -1,0 +1,87 @@
+{
+  "variables": {
+    "iso_url":  "http://releases.ubuntu.com/12.04/ubuntu-12.04.4-server-amd64.iso",
+    "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
+    "iso_checksum_type": "md5",
+    "vbox_guest_os": "Ubuntu_64",
+    "arch": "x64",
+    "memory": "512",
+    "cpus": "1",
+    "disk": "10240",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "hostname": "precise-minimal",
+    "configuration": "minimal",
+    "preseed": "preseed.cfg"
+  },
+  "builders": [
+    {
+    "type": "virtualbox-iso",
+    "guest_os_type": "{{user `vbox_guest_os`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_hostname={{user `hostname`}}<wait>",
+        " netcfg/get_domain=ccs.neu.edu<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed`}}<wait>",
+        " -- <wait>",
+        "<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/packages-ubuntu1204.sh",
+        "scripts/vagrant-key.sh",
+        "scripts/udev-cleanup.sh",
+        "scripts/apt-upgrade.sh",
+        "scripts/apt-cleanup.sh",
+        "scripts/cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+        }
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-bostonpug-packer-templates
+packer-templates
 ==========================
 
-Packer Templates for PUG baseboxes
+Packer Templates for Boston Puppet User Group baseboxes
