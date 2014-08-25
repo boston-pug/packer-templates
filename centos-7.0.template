@@ -1,8 +1,8 @@
 {
   "variables": {
-    "iso_url": "http://ftp1.scientificlinux.org/linux/scientific/6.5/x86_64/iso/SL-65-x86_64-2013-12-05-boot.iso",
-    "iso_checksum": "2c56df9b6a6cce14fae802de0bb4a675b5bdc69d",
-    "iso_checksum_type": "sha1",
+    "iso_url": "http://mirrors.cat.pdx.edu/centos/7.0.1406/isos/x86_64/CentOS-7.0-1406-x86_64-NetInstall.iso",
+    "iso_checksum": "96de4f38a2f07da51831153549c8bd0c",
+    "iso_checksum_type": "md5",
     "vbox_guest_os": "RedHat_64",
     "arch": "x64",
     "memory": "512",
@@ -10,9 +10,9 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "scientific6-minimal",
+    "hostname": "centos-7.0",
     "configuration": "minimal",
-    "kickstart": "scientific6.ks"
+    "kickstart": "maipo.ks"
   },
   "builders": [
     {
@@ -45,7 +45,6 @@
       "scripts": [
         "scripts/vagrant-key.sh",
         "scripts/enterprise/repos.sh",
-        "scripts/udev-cleanup.sh",
         "scripts/cleanup.sh"
       ]
     }

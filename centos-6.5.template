@@ -10,9 +10,9 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "centos6-minimal",
+    "hostname": "centos-6.5",
     "configuration": "minimal",
-    "kickstart": "centos6.ks"
+    "kickstart": "santiago.ks"
   },
   "builders": [
     {
