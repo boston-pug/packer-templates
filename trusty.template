@@ -66,6 +66,7 @@
       "scripts": [
         "scripts/debian/base.sh",
         "scripts/debian/packages-trusty.sh",
+        "scripts/debian/virtualbox.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
         "scripts/debian/apt.sh",
