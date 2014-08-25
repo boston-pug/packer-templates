@@ -61,7 +61,7 @@
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
         "scripts/debian/base.sh",
-        "scripts/debian/packages-trusty.sh",
+        "scripts/debian/packages-wheezy.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
         "scripts/debian/apt.sh",
