@@ -6,7 +6,7 @@ timezone --utc America/New_York
 lang en_US.UTF-8
 keyboard us
 
-network --bootproto=dhcp --onboot=yes --hostname=el6-minimal
+network --bootproto=dhcp --onboot=yes --hostname=centos6-minimal
 
 authconfig --enableshadow --passalgo=sha512
 rootpw --plaintext vagrant
@@ -32,21 +32,19 @@ reboot
 puppet
 
 %post
-echo "Removing firmware packages"
+# Clear firmware
 yum remove -y *firmware
 
-echo "Clearing motd"
+# Clear motd
 rm -f /etc/motd && touch /etc/motd
 
-echo "Setting up SSH for vagrant"
+# more RHEL, but does no harm
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
-echo "Setting up sudoers"
+# Override some defaults
 sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=sudo' /etc/sudoers
 sed -i -e 's/^Defaults\ requiretty/\#Defaults\ requiretty/g /etc/sudoers'
 
 # Nopasswd for sudo
 sed -i -e 's/%sudo  ALL=(ALL:ALL) ALL/%sudo  ALL=NOPASSWD:ALL/g' /etc/sudoers
-
-echo "Adding vagrant to sudoers"
 echo "vagrant  ALL=NOPASSWD:ALL" >> /etc/sudoers

@@ -1,0 +1,63 @@
+{
+  "variables": {
+    "iso_url": "http://ftp1.scientificlinux.org/linux/scientific/6.5/x86_64/iso/SL-65-x86_64-2013-12-05-boot.iso",
+    "iso_checksum": "2c56df9b6a6cce14fae802de0bb4a675b5bdc69d",
+    "iso_checksum_type": "sha1",
+    "vbox_guest_os": "RedHat_64",
+    "arch": "x64",
+    "memory": "512",
+    "cpus": "1",
+    "disk": "10240",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "hostname": "scientific6-minimal",
+    "configuration": "minimal",
+    "kickstart": "scientific6.ks"
+  },
+  "builders": [
+    {
+    "type": "virtualbox-iso",
+    "guest_os_type": "{{user `vbox_guest_os`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+    ],
+    "boot_wait": "10s",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+    ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "scripts/vagrant-key.sh",
+        "scripts/enterprise/repos.sh",
+        "scripts/udev-cleanup.sh",
+        "scripts/cleanup.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+        }
+      }
+    }
+  ]
+}
