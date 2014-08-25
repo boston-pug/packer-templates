@@ -29,7 +29,6 @@ reboot
 %packages
 @base
 @core
-kernel-headers
 puppet
 
 %post

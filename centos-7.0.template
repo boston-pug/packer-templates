@@ -45,6 +45,7 @@
       "scripts": [        
         "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
+        "scripts/enterprise/virtualbox.sh",
         "scripts/enterprise/repos.sh",
         "scripts/cleanup.sh"
       ]

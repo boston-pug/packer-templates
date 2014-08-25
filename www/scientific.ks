@@ -30,6 +30,7 @@ reboot
 %packages
 @base
 @core
+puppet
 
 %post
 # Clear firmware
