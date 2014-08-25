@@ -43,6 +43,7 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
+        "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
         "scripts/enterprise/repos.sh",
         "scripts/udev-cleanup.sh",

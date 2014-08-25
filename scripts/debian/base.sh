@@ -12,4 +12,4 @@ sed -i -e 's/^Defaults\ requiretty/\#Defaults\ requiretty/g /etc/sudoers'
 sed -i -e 's/%sudo  ALL=(ALL:ALL) ALL/%sudo  ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 # And make sure vagrant is allowed
-echo "vagrant  ALL=NOPASSWD:ALL" >> /etc/sudoers
+echo "vagrant  ALL=NOPASSWD:ALL" >> /etc/sudoers.d/vagrant
