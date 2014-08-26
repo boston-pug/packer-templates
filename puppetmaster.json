@@ -61,7 +61,8 @@
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
-        "scripts/cleanup.sh"
+        "scripts/cleanup.sh",
+        "scripts/puppet-cleanup.sh"
       ]
     }
   ],

@@ -46,7 +46,8 @@
         "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
         "scripts/enterprise/virtualbox.sh",
-        "scripts/enterprise/repos.sh"
+        "scripts/enterprise/repos.sh",
+        "scripts/enterprise/el7.sh"
       ]
    },
    {

@@ -20,31 +20,34 @@ class puppetmaster {
   # Fix up the reports directory
   file { '/var/lib/puppet/reports/':
     ensure => directory,
-    owner => 'puppet',
+    owner  => 'puppet',
   }
 
   # Set up rack directories and puppetmaster in passenger
   file { '/usr/share/puppet/rack': 
     ensure => directory, 
-    owner => "puppet", 
+    owner  => "puppet", 
   } ->
   file { '/usr/share/puppet/rack/puppetmaster': 
     ensure => directory, 
-    owner => "puppet", 
+    owner  => "puppet", 
   } ->
   file { '/usr/share/puppet/rack/puppetmaster/public': 
     ensure => directory, 
-    owner => "puppet", 
-    group => "puppet", 
+    owner  => "puppet", 
+    group  => "puppet", 
   } ->
   file { '/usr/share/puppet/rack/puppetmaster/config.ru': 
-    source => 'puppet:///modules/puppetmaster/config.ru', 
-    owner => "puppet", 
+    source  => 'puppet:///modules/puppetmaster/config.ru', 
+    owner   => "puppet", 
+    mode    => '0664',
     require => File['/usr/share/puppet/rack/puppetmaster'], 
   }
 
   # Apache config
   file { '/etc/httpd/conf.d/puppetmaster.conf':
+    owner  => 'root',
+    mode   => '0664',
     source => 'puppet:///modules/puppetmaster/puppetmaster.conf',
   }
 }
