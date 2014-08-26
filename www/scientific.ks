@@ -21,7 +21,7 @@ bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet
 autopart
 
 repo --name="security" --baseurl="http://mirror.rit.edu/scientific/6.5/x86_64/updates/security/"
-repo --name="fastbugs" --baseurl="http://mirror.rit.edu/scientific/6.5/x86_64/updates/fastbugs/"
+#repo --name="fastbugs" --baseurl="http://mirror.rit.edu/scientific/6.5/x86_64/updates/fastbugs/"
 repo --name="puppet-deps" --baseurl="http://yum.puppetlabs.com/el/6/dependencies/x86_64/"
 repo --name="puppet" --baseurl="http://yum.puppetlabs.com/el/6/products/x86_64/"
 
