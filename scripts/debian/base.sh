@@ -13,3 +13,4 @@ sed -i -e 's/%sudo  ALL=(ALL:ALL) ALL/%sudo  ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 # And make sure vagrant is allowed
 echo "vagrant  ALL=NOPASSWD:ALL" >> /etc/sudoers.d/vagrant
+chmod 0440 /etc/sudoers.d/vagrant

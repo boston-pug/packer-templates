@@ -8,7 +8,7 @@ timezone America/New_York --isUtc
 lang en_US.UTF-8
 keyboard --vckeymap=us --xlayouts='us'
 
-network --bootproto=dhcp --onboot=yes --hostname='centos-7.0'
+network --bootproto=dhcp --onboot=yes --hostname='centos-7.0.example.com'
 
 authconfig --enableshadow --passalgo=sha512
 rootpw --plaintext vagrant
@@ -32,6 +32,7 @@ reboot
 @base
 @core
 puppet
+puppetlabs-release
 %end
 
 %post

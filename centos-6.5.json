@@ -47,7 +47,20 @@
         "scripts/vagrant-key.sh",
         "scripts/enterprise/virtualbox.sh",
         "scripts/enterprise/repos.sh",
-        "scripts/udev-cleanup.sh",
+        "scripts/udev-cleanup.sh"
+      ]
+   },
+   {
+      "type": "puppet-masterless",
+      "manifest_file": "puppet/manifests/{{user `configuration`}}.pp",
+      "module_paths": [
+         "puppet/modules/"
+       ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
         "scripts/cleanup.sh"
       ]
     }

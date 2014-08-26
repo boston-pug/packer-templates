@@ -3,6 +3,9 @@
 # Clean the logs
 find /var/log -type f -delete
 
+# Clean puppet
+rm -rf /var/lib/puppet/*
+
 # Temp directory
 rm -f /tmp/*
 

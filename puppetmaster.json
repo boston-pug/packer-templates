@@ -1,7 +1,7 @@
 {
   "variables": {
-    "iso_url": "http://mirrors.cat.pdx.edu/centos/7.0.1406/isos/x86_64/CentOS-7.0-1406-x86_64-NetInstall.iso",
-    "iso_checksum": "96de4f38a2f07da51831153549c8bd0c",
+    "iso_url": "http://mirror.rit.edu/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-netinstall.iso",
+    "iso_checksum": "939fd1d87c11ffe7795324438b85adfb",
     "iso_checksum_type": "md5",
     "vbox_guest_os": "RedHat_64",
     "arch": "x64",
@@ -10,9 +10,9 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "centos-7.0",
-    "configuration": "minimal",
-    "kickstart": "maipo.ks"
+    "hostname": "puppetmaster",
+    "configuration": "puppetmaster",
+    "kickstart": "puppetmaster.ks"
   },
   "builders": [
     {
@@ -42,11 +42,25 @@
     {
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
-      "scripts": [        
+      "scripts": [
         "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
         "scripts/enterprise/virtualbox.sh",
         "scripts/enterprise/repos.sh",
+        "scripts/udev-cleanup.sh"
+      ]
+   },
+   {
+      "type": "puppet-masterless",
+      "manifest_file": "puppet/manifests/{{user `configuration`}}.pp",
+      "module_paths": [
+         "puppet/modules/"
+       ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
         "scripts/cleanup.sh"
       ]
     }

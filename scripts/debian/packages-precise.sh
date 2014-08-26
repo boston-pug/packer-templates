@@ -7,4 +7,4 @@ dpkg -i /tmp/puppetlabs-release-precise.deb
 apt-get update -y
 
 # Install puppet
-apt-get install puppet -y
+apt-get install puppet rubygems -y

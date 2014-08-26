@@ -1,0 +1,10 @@
+$TTL 36000
+@             IN      SOA   puppet.example.com. hostmaster.example.com. (
+              2014030400
+              3600
+              900
+              864000
+              86400 )
+              IN      NS    puppet.example.com.
+
+puppet        IN      A     203.0.113.2

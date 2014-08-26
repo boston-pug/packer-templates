@@ -31,10 +31,11 @@ reboot
 @base
 @core
 puppet
+puppetlabs-release
 
 %post
 # Clear firmware
 yum remove -y *firmware
        
 # Add vagrant user to sudoers
-echo "vagrant  ALL=(ALL)   NOPASSWD:ALL" >> /etc/sudoers.d/vagrant 
+echo "vagrant  ALL=(ALL)   NOPASSWD:ALL" > /etc/sudoers.d/vagrant 

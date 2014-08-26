@@ -1,7 +1,7 @@
 {
   "variables": {
-    "iso_url":  "http://releases.ubuntu.com/14.04/ubuntu-14.04.1-server-amd64.iso",
-    "iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
+    "iso_url":  "http://releases.ubuntu.com/12.04/ubuntu-12.04.4-server-amd64.iso",
+    "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
     "iso_checksum_type": "md5",
     "vbox_guest_os": "Ubuntu_64",
     "arch": "x64",
@@ -10,7 +10,7 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "trusty-minimal",
+    "hostname": "precise-minimal",
     "configuration": "minimal",
     "preseed": "preseed.cfg"
   },
@@ -65,11 +65,24 @@
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
         "scripts/debian/base.sh",
-        "scripts/debian/packages-trusty.sh",
+        "scripts/debian/packages-precise.sh",
         "scripts/debian/virtualbox.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
-        "scripts/debian/apt.sh",
+        "scripts/debian/apt.sh"
+      ]
+   },
+   {
+      "type": "puppet-masterless",
+      "manifest_file": "puppet/manifests/{{user `configuration`}}.pp",
+      "module_paths": [
+         "puppet/modules/"
+       ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
         "scripts/cleanup.sh"
       ]
     }
