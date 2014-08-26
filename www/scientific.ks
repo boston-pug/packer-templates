@@ -30,6 +30,7 @@ reboot
 %packages
 @base
 @core
+sudo
 puppet
 puppetlabs-release
 
@@ -38,4 +39,6 @@ puppetlabs-release
 yum remove -y *firmware
        
 # Add vagrant user to sudoers
-echo "vagrant  ALL=(ALL)   NOPASSWD:ALL" > /etc/sudoers.d/vagrant 
+echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
+chmod 0440 /etc/sudoers.d/vagrant
+
