@@ -46,7 +46,7 @@
     "disk_size" : "{{user `disk`}}",
     "http_directory": "www",
     "boot_command": [
-      "<tab> text ks=http://192.168.252.1:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
     ],
     "boot_wait": "10s",
     "ssh_username": "{{user `ssh_username`}}",
