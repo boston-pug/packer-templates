@@ -36,6 +36,29 @@
       [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
       [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
     ]
+    },
+    {
+    "type": "vmware-iso",
+    "guest_os_type": "linux",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+    ],
+    "boot_wait": "10s",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+    "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "1"
+    }
     }
   ],
   "provisioners": [
@@ -45,9 +68,25 @@
       "scripts": [
         "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
-        "scripts/enterprise/virtualbox.sh",
         "scripts/enterprise/repos.sh",
         "scripts/udev-cleanup.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["virtualbox-iso"],
+      "scripts": [
+        "scripts/enterprise/virtualbox.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["vmware-iso"],
+      "scripts": [
+        "scripts/enterprise/vmware-el6.sh",
+        "scripts/enterprise/vmnetwork.sh"
       ]
    },
    {
