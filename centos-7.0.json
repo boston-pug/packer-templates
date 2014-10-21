@@ -113,6 +113,9 @@
       "override": {
         "virtualbox": {
           "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+        },
+        "vmware": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-vmware.box"
         }
       }
     }

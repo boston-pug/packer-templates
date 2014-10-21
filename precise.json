@@ -57,7 +57,54 @@
         [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
       ]
+    },
+    {
+    "type": "vmware-iso",
+    "guest_os_type": "linux",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz <wait>",
+        "auto <wait>",
+        "console-setup/ask_detect=false <wait>",
+        "console-setup/layoutcode=us <wait>",
+        "console-setup/modelcode=pc105 <wait>",
+        "debconf/frontend=noninteractive <wait>",
+        "debian-installer=en_US <wait>",
+        "fb=false <wait>",
+        "initrd=/install/initrd.gz <wait>",
+        "kbd-chooser/method=us <wait>",
+        "keyboard-configuration/layout=USA <wait>",
+        "keyboard-configuration/variant=USA <wait>",
+        "locale=en_US <wait>",
+        "netcfg/get_hostname={{user `hostname`}} <wait>",
+        "netcfg/get_domain=example.com <wait>",
+        "noapic <wait>",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed`}} <wait>",
+        "-- <wait>",
+        "<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "linux",
+      "tools_upload_path": "/tmp/{{.Flavor}}.iso",
+      "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+      "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "1"
+      }
     }
+
   ],
   "provisioners": [
     {
@@ -66,10 +113,25 @@
       "scripts": [
         "scripts/debian/base.sh",
         "scripts/debian/packages-precise.sh",
-        "scripts/debian/virtualbox.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
         "scripts/debian/apt.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["virtualbox-iso"],
+      "scripts": [
+        "scripts/debian/virtualbox.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["vmware-iso"],
+      "scripts": [
+        "scripts/debian/vmware.sh"
       ]
    },
    {
@@ -93,6 +155,9 @@
       "override": {
         "virtualbox": {
           "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+        },
+        "vmware": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-vmware.box"
         }
       }
     }
