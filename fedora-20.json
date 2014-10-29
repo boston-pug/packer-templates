@@ -1,18 +1,18 @@
 {
   "variables": {
-    "iso_url":  "http://mirror.rit.edu/debian-cd/current/amd64/iso-cd/debian-7.7.0-amd64-netinst.iso",
-    "iso_checksum": "0b31bccccb048d20b551f70830bb7ad0",
-    "iso_checksum_type": "md5",
-    "vbox_guest_os": "Debian_64",
+    "iso_url": "http://mirror.seas.harvard.edu/fedora/linux/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso",
+    "iso_checksum": "376be7d4855ad6281cb139430606a782fd6189dcb01d7b61448e915802cc350f",
+    "iso_checksum_type": "sha256",
+    "vbox_guest_os": "RedHat_64",
     "arch": "x64",
     "memory": "512",
     "cpus": "1",
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "debian",
+    "hostname": "fedora-20",
     "configuration": "minimal",
-    "preseed": "debian-preseed.cfg"
+    "kickstart": "fedora.ks"
   },
   "builders": [
     {
@@ -24,28 +24,14 @@
     "disk_size" : "{{user `disk`}}",
     "http_directory": "www",
     "boot_command": [
-       "<esc><wait>",
-       "install <wait>",
-       "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed`}} <wait>",
-       "debian-installer=en_US <wait>",
-       "auto <wait>",
-       "locale=en_US <wait>",
-       "kbd-chooser/method=us <wait>",
-       "keyboard-configuration/xkb-keymap=us <wait>",
-       "netcfg/get_hostname={{ .Name }} <wait>",
-       "netcfg/get_domain=vagrantup.com <wait>",
-       "fb=false <wait>",
-       "debconf/frontend=noninteractive <wait>",
-       "console-setup/ask_detect=false <wait>",
-       "console-keymaps-at/keymap=us <wait>",
-       "<enter><wait>"
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
     ],
     "boot_wait": "10s",
     "ssh_username": "{{user `ssh_username`}}",
     "ssh_password": "{{user `ssh_password`}}",
     "ssh_port": 22,
     "ssh_wait_timeout": "10000s",
-    "shutdown_command": "echo '{{user `ssh_password`}}'|sudo -S /sbin/shutdown -hP now",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
     "vboxmanage": [
       [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
       [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
@@ -60,28 +46,16 @@
     "disk_size" : "{{user `disk`}}",
     "http_directory": "www",
     "boot_command": [
-       "<esc><wait>",
-       "install <wait>",
-       "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `preseed`}} <wait>",
-       "debian-installer=en_US <wait>",
-       "auto <wait>",
-       "locale=en_US <wait>",
-       "kbd-chooser/method=us <wait>",
-       "keyboard-configuration/xkb-keymap=us <wait>",
-       "netcfg/get_hostname={{ .Name }} <wait>",
-       "netcfg/get_domain=vagrantup.com <wait>",
-       "fb=false <wait>",
-       "debconf/frontend=noninteractive <wait>",
-       "console-setup/ask_detect=false <wait>",
-       "console-keymaps-at/keymap=us <wait>",
-       "<enter><wait>"
+      "<tab> text ks=http://129.10.117.124:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
     ],
     "boot_wait": "10s",
     "ssh_username": "{{user `ssh_username`}}",
     "ssh_password": "{{user `ssh_password`}}",
     "ssh_port": 22,
     "ssh_wait_timeout": "10000s",
-    "shutdown_command": "echo '{{user `ssh_password`}}'|sudo -S /sbin/shutdown -hP now",
+    "tools_upload_flavor": "linux",
+    "tools_upload_path": "/tmp/{{.Flavor}}.iso",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
     "vmx_data": {
         "memsize": "{{user `memory`}}",
         "numvcpus": "{{user `cpus`}}",
@@ -93,12 +67,42 @@
     {
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
-      "scripts": [
-        "scripts/debian/base.sh",
-        "scripts/debian/packages-wheezy.sh",
+      "scripts": [        
+        "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
-        "scripts/udev-cleanup.sh",
-        "scripts/debian/apt.sh",
+        "scripts/enterprise/repos.sh",
+        "scripts/enterprise/el7.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["virtualbox-iso"],
+      "scripts": [
+        "scripts/enterprise/virtualbox.sh"
+      ]
+   },
+   {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "only": ["vmware-iso"],
+      "scripts": [
+        "scripts/enterprise/vmware-el7.sh",
+        "scripts/enterprise/vmnetwork.sh"
+      ]
+   },
+
+   {
+      "type": "puppet-masterless",
+      "manifest_file": "puppet/manifests/{{user `configuration`}}.pp",
+      "module_paths": [
+         "puppet/modules/"
+       ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [
         "scripts/cleanup.sh"
       ]
     }

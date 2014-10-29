@@ -19,7 +19,7 @@ selinux --permissive
 
 zerombr
 clearpart --all --initlabel --drives=sda
-bootloader --location=mbr --boot-drive=sda
+bootloader --location=mbr --boot-drive=sda --append="biosdevname=0"
 autopart --type=lvm
 
 repo --name="updates" --baseurl="http://mirrors.cat.pdx.edu/centos/7.0.1406/updates/x86_64/"
