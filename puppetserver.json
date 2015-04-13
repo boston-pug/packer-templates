@@ -5,12 +5,12 @@
     "iso_checksum_type": "md5",
     "vbox_guest_os": "RedHat_64",
     "arch": "x64",
-    "memory": "512",
+    "memory": "2560",
     "cpus": "1",
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "centos-7.0",
+    "hostname": "centos-puppetserver",
     "configuration": "minimal",
     "kickstart": "maipo.ks"
   },
@@ -71,7 +71,8 @@
         "scripts/enterprise/base.sh",
         "scripts/vagrant-key.sh",
         "scripts/enterprise/repos.sh",
-        "scripts/enterprise/el7.sh"
+        "scripts/enterprise/el7.sh",
+        "scripts/enterprise/puppetmaster.sh"
       ]
    },
    {

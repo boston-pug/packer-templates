@@ -2,7 +2,7 @@ skipx
 text
 eula --agreed
 
-url --url=http://mirrors.cat.pdx.edu/centos/7.0.1406/os/x86_64/
+url --url=http://mirror.umd.edu/centos/7/os/x86_64/
 
 timezone America/New_York --isUtc
 lang en_US.UTF-8
@@ -22,7 +22,7 @@ clearpart --all --initlabel --drives=sda
 bootloader --location=mbr --boot-drive=sda --append="biosdevname=0"
 autopart --type=lvm
 
-repo --name="updates" --baseurl="http://mirrors.cat.pdx.edu/centos/7.0.1406/updates/x86_64/"
+repo --name="updates" --baseurl="http://mirror.umd.edu/centos/7/updatesx86_64/"
 repo --name="puppet-deps" --baseurl="http://yum.puppetlabs.com/el/7/dependencies/x86_64/"
 repo --name="puppet" --baseurl="http://yum.puppetlabs.com/el/7/products/x86_64/"
 
@@ -32,7 +32,14 @@ reboot
 @base
 @core
 puppet
+deltarpm
 puppetlabs-release
+# VMWare-tools prereqs
+kernel-headers
+kernel-devel
+gcc
+fuse
+make
 %end
 
 %post
