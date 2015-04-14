@@ -1,11 +1,12 @@
 {
   "variables": {
+    "version": "1.0.0",
     "iso_url": "http://mirror.umd.edu/centos/7/isos/x86_64/CentOS-7-x86_64-NetInstall-1503.iso",
     "iso_checksum": "111379a06402e1e445c6aeee9401d031",
     "iso_checksum_type": "md5",
     "vbox_guest_os": "RedHat_64",
     "arch": "x64",
-    "memory": "2560",
+    "memory": "2432",
     "cpus": "1",
     "disk": "10240",
     "ssh_username": "vagrant",
@@ -113,10 +114,10 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "pug-{{user `hostname`}}-{{user `arch`}}-virtualbox.box"
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-{{user `version`}}-virtualbox.box"
         },
         "vmware": {
-          "output": "pug-{{user `hostname`}}-{{user `arch`}}-vmware.box"
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-{{user `version`}}-vmware.box"
         }
       }
     }

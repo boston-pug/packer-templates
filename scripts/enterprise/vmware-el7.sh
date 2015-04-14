@@ -1,3 +1,4 @@
+# Install prereqs
 yum install -y kernel-headers gcc fuse make kernel-devel
 
 # Extract Tarball from iso

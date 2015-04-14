@@ -1,2 +1,2 @@
-yum install puppetserver -y
+yum install puppetserver puppetdb -y
 gem install r10k
