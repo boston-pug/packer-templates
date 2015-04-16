@@ -1,7 +1,7 @@
 {
   "variables": {
-    "iso_url":  "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
-    "iso_checksum": "83aabd8dcf1e8f469f3c72fff2375195",
+    "iso_url":  "http://releases.ubuntu.com/15.04/ubuntu-15.04-beta2-server-amd64.iso",
+    "iso_checksum": "7027ac66cbc2413c40ea643a284a2b1b",
     "iso_checksum_type": "md5",
     "vbox_guest_os": "Ubuntu_64",
     "arch": "x64",
@@ -10,7 +10,7 @@
     "disk": "10240",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "hostname": "trusty-minimal",
+    "hostname": "vivid-minimal",
     "configuration": "minimal",
     "preseed": "preseed.cfg"
   },
@@ -113,7 +113,7 @@
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
         "scripts/debian/base.sh",
-        "scripts/debian/packages-trusty.sh",
+        "scripts/debian/packages-vivid.sh",
         "scripts/vagrant-key.sh",
         "scripts/udev-cleanup.sh",
         "scripts/debian/apt.sh"

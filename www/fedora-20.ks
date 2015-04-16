@@ -2,7 +2,9 @@ skipx
 text
 install
 eula --agreed
-url --url=http://mirror.seas.harvard.edu/fedora/linux/releases/20/Everything/x86_64/os/
+
+url --url=http://mirror.seas.harvard.edu/fedora/linux/releases/20/Fedora/x86_64/os/
+
 timezone America/New_York --isUtc
 lang en_US.UTF-8
 keyboard --vckeymap=us --xlayouts='us'
@@ -18,9 +20,10 @@ selinux --permissive
 
 zerombr
 clearpart --all --initlabel --drives=sda
-bootloader --location=mbr --boot-drive=sda --append="norhgb biosdevname=0"
+bootloader --location=mbr --boot-drive=sda
 autopart --type=lvm
 
+repo --name="everything" --baseurl="http://mirror.seas.harvard.edu/fedora/linux/releases/20/Everything/x86_64/os/"
 repo --name="updates" --baseurl="http://mirror.seas.harvard.edu/fedora/linux/updates/20/x86_64/"
 repo --name="puppet-deps" --baseurl="http://yum.puppetlabs.com/fedora/f20/dependencies/x86_64/"
 repo --name="puppet" --baseurl="http://yum.puppetlabs.com/fedora/f20/products/x86_64/"
@@ -38,4 +41,5 @@ puppetlabs-release
 %post
 # Add vagrant user to sudoers
 echo "vagrant  ALL=(ALL)   NOPASSWD:ALL" >> /etc/sudoers.d/vagrant
+reboot
 %end
