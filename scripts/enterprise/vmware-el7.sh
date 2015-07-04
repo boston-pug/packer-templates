@@ -19,4 +19,5 @@ tar -C /tmp/vmware-tools/vmware-tools-distrib/lib/modules/source/ -cvf /tmp/vmwa
 
 echo "Installing vmware tools"
 /tmp/vmware-tools/vmware-tools-distrib/vmware-install.pl --default
+echo "answer AUTO_KMODS_ENABLED yes" | sudo tee -a /etc/vmware-tools/locations
 echo "Done"

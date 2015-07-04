@@ -1,0 +1,89 @@
+{
+  "variables": {
+    "version": "7.1.2.0",
+    "iso_url": "http://cloud.centos.org/centos/7/atomic/images/CentOS-Atomic-Host-7.1.2-Installer.iso",
+    "iso_checksum": "bfd773fbec8fe15f58e9bb01d91809d2ccc9671079b2dff572d08ab607b12acf",
+    "iso_checksum_type": "sha256",
+    "vbox_guest_os": "RedHat_64",
+    "arch": "x64",
+    "memory": "512",
+    "cpus": "1",
+    "disk": "10240",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "hostname": "atomic",
+    "configuration": "minimal",
+    "kickstart": "atomic.ks"
+  },
+  "builders": [
+    {
+    "type": "virtualbox-iso",
+    "guest_os_type": "{{user `vbox_guest_os`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+    ],
+    "boot_wait": "10s",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}" ]
+    ]
+    },
+    {
+    "type": "vmware-iso",
+    "guest_os_type": "linux",
+    "iso_url": "{{user `iso_url`}}",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "disk_size" : "{{user `disk`}}",
+    "http_directory": "www",
+    "boot_command": [
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+    ],
+    "boot_wait": "10s",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+    "tools_upload_flavor": "linux",
+    "tools_upload_path": "/tmp/{{.Flavor}}.iso",
+    "shutdown_command": "echo 'shutdown -P now' > /tmp/shutdown.sh; echo '{{user `ssh_password`}}'|sudo -S sh '/tmp/shutdown.sh'",
+    "vmx_data": {
+        "memsize": "{{user `memory`}}",
+        "numvcpus": "{{user `cpus`}}",
+        "cpuid.coresPerSocket": "1"
+    }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
+      "scripts": [        
+        "scripts/vagrant-key.sh"
+      ]
+   }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "override": {
+        "virtualbox": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-{{user `version`}}-virtualbox.box"
+        },
+        "vmware": {
+          "output": "pug-{{user `hostname`}}-{{user `arch`}}-{{user `version`}}-vmware.box"
+        }
+      }
+    }
+  ]
+}
