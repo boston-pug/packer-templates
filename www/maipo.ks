@@ -29,8 +29,14 @@ reboot
 %post 
 # Basic vagrant settings
 sed -i -e 's/requiretty/!requiretty/' /etc/sudoers && echo "vagrant  ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/vagrant 
+
+# ifcfg-ethX for life!
 sed -i -e 's/quiet/net.ifnames=0 biosdevname=0 quiet/' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# No network manager
+systemctl disable NetworkManager
+systemctl enable network
 %end
 
 %packages —-nobase
