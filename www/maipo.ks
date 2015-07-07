@@ -34,5 +34,6 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 %end
 
 %packages —-nobase
+bash-completion
 -*firmware
 %end
