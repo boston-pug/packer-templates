@@ -41,5 +41,6 @@ systemctl enable network
 
 %packages —-nobase
 bash-completion
+net-tools
 -*firmware
 %end
