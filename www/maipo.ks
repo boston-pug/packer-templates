@@ -22,30 +22,17 @@ clearpart --all --initlabel --drives=sda
 bootloader --location=mbr --boot-drive=sda --append="biosdevname=0"
 autopart --type=lvm
 
-repo --name="updates" --baseurl="http://mirror.umd.edu/centos/7/updatesx86_64/"
-repo --name="puppet-deps" --baseurl="http://yum.puppetlabs.com/el/7/dependencies/x86_64/"
-repo --name="puppet" --baseurl="http://yum.puppetlabs.com/el/7/products/x86_64/"
+repo --name="updates" --baseurl="http://mirror.umd.edu/centos/7/updates/x86_64/"
 
 reboot
 
-%packages
-@base
-@core
-puppet
-deltarpm
-puppetlabs-release
-# VMWare-tools prereqs
-kernel-headers
-kernel-devel
-gcc
-fuse
-make
+%post 
+# Basic vagrant settings
+sed -i -e 's/requiretty/!requiretty/' /etc/sudoers && echo "vagrant  ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/vagrant 
+sed -i -e 's/quiet/net.ifnames=0 biosdevname=0 quiet/' /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
 %end
 
-%post
-# Clear firmware
-yum remove -y *firmware
-
-# Add vagrant user to sudoers
-echo "vagrant  ALL=(ALL)   NOPASSWD:ALL" >> /etc/sudoers.d/vagrant
+%packages —-nobase
+-*firmware
 %end

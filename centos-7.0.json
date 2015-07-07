@@ -47,7 +47,7 @@
     "disk_size" : "{{user `disk`}}",
     "http_directory": "www",
     "boot_command": [
-      "<tab> text ks=http://129.10.117.124:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
     ],
     "boot_wait": "10s",
     "ssh_username": "{{user `ssh_username`}}",
@@ -92,21 +92,13 @@
         "scripts/enterprise/vmnetwork.sh"
       ]
    },
-
    {
-      "type": "puppet-masterless",
-      "manifest_file": "puppet/manifests/{{user `configuration`}}.pp",
-      "module_paths": [
-         "puppet/modules/"
-       ]
-    },
-    {
       "type": "shell",
       "execute_command": "echo '{{user `ssh_password`}}'|sudo -S sh '{{.Path}}'",
       "scripts": [
         "scripts/cleanup.sh"
       ]
-    }
+   }
   ],
   "post-processors": [
     {
