@@ -5,5 +5,4 @@ DEVICE="eth0"
 BOOTPROTO="dhcp"
 ONBOOT="yes"
 TYPE="Ethernet"
-NM_CONTROLLED="yes"
 EOT

@@ -1,5 +1,5 @@
 # Install prereqs
-yum install -y kernel-headers gcc fuse make kernel-devel net-tools
+yum install -y kernel-headers gcc fuse make kernel-devel net-tools open-vm-tools
 
 # Extract Tarball from iso
 mount /tmp/linux.iso /media

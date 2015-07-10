@@ -1,2 +1,2 @@
 yum install -y openstack-packstack
-packstack —-allinone
+#su -l -c "packstack —-gen-answer-file=~/answers.txt"

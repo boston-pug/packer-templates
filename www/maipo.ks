@@ -37,6 +37,18 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 # No network manager
 systemctl disable NetworkManager
 systemctl enable network
+
+# Override udev net-rules
+mkdir -p /etc/udev/rules.d/60-net.rules
+
+# Create eth0
+rm -f /etc/sysconfig/network-scripts/ifcfg-e*
+cat <<EOT >/etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE="eth0"
+BOOTPROTO="dhcp"
+ONBOOT="yes"
+TYPE="Ethernet"
+EOT
 %end
 
 %packages —-nobase
